@@ -13,19 +13,26 @@ public class ResponseServer {
 	public static void main(String[] args) throws IOException {
 
 		ServerSocket serverSocket = new ServerSocket(8080);
-		Socket socket = serverSocket.accept();
+		int counter = 0;
+		while (true) {
+			Socket socket = serverSocket.accept();
 
-		InputStream in = socket.getInputStream();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line;
-		while ((line = reader.readLine()) != null) {
-			System.out.println(line);
+			InputStream in = socket.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String line;
+			while (!"".equals((line = reader.readLine()))) {
+				System.out.println(line);
+			}
+
+			OutputStream out = socket.getOutputStream();
+			String response = "<h2><em>this is the " + counter + "th request</em></h2>";
+			out.write("HTTP/1.1 200 OK\n".getBytes());
+			out.write("Content-Type: text/html; charset=utf-8\n".getBytes());
+			out.write(("Content-Length: " + response.length() + "\n\n").getBytes());
+			out.write(response.getBytes());
+			out.flush();
+			out.close();
+			counter++;
 		}
-
-		OutputStream out = socket.getOutputStream();
-		out.write("Hello World!".getBytes());
-		out.flush();
-		out.close();
 	}
-
 }
