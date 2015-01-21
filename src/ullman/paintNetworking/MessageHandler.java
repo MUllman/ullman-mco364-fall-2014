@@ -9,12 +9,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class MessageReceiver extends Thread {
+public class MessageHandler extends Thread {
     private Socket socket;
     private MessageFactory factory;
     private Canvas canvas;
 
-    public MessageReceiver(Socket socket, MessageFactory factory, Canvas canvas) {
+    public MessageHandler(Socket socket, MessageFactory factory, Canvas canvas) {
         this.socket = socket;
         this.factory = factory;
         this.canvas = canvas;

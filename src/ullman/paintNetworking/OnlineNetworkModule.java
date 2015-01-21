@@ -22,8 +22,8 @@ public class OnlineNetworkModule implements NetworkModule {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		MessageReceiver receiver = new MessageReceiver(socket, factory, canvas);
-		receiver.start();
+		MessageHandler handler = new MessageHandler(socket, factory, canvas);
+		handler.start();
 	}
 
 	public Socket getSocket() {
