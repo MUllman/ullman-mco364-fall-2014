@@ -1,29 +1,26 @@
-package ullman.paintLayers.drawListener;
+package ullman.paintNetworking.drawListener;
 
-import java.awt.Graphics2D;
+import ullman.paintNetworking.actionListener.ShapeDropDownListener;
+import ullman.paintNetworking.Canvas;
+import ullman.paintNetworking.message.LineMessage;
+
+import java.awt.*;
 import java.awt.event.MouseEvent;
-
-import ullman.paintLayers.Canvas;
 
 public class LineDrawListener implements DrawListener {
 
     private Canvas canvas;
+    private int x1, y1, x2, y2;
     private boolean preview;
-    private int x1, x2, y1, y2;
 
     public LineDrawListener(Canvas canvas) {
-        this.canvas = canvas;
-    }
-
-    @Override
-    public void draw(Graphics2D g) {
-        g.drawLine(x1, y1, x2, y2);
+        this.canvas =canvas;
     }
 
     @Override
     public void drawPreview(Graphics2D graphics) {
-        if (preview) {
-            draw(graphics);
+        if(preview){
+            graphics.drawLine(x1, y1, x2, y2);;
         }
     }
 
@@ -35,9 +32,9 @@ public class LineDrawListener implements DrawListener {
     @Override
     public void mousePressed(MouseEvent e) {
         preview = true;
-        x1= e.getX();
-        x2= e.getX();
-        y1= e.getY();
+        x1 = e.getX();
+        y1 = e.getY();
+        x2 = e.getX();
         y2 = e.getY();
         canvas.repaint();
     }
@@ -45,10 +42,11 @@ public class LineDrawListener implements DrawListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         preview = false;
-        Graphics2D g = (Graphics2D) canvas.getImage().getGraphics();
-        canvas.getStrokeSettings().changeStrokeSettings(g);
-        draw(g);
-        canvas.repaint();
+
+        x2 = e.getX();
+        y2 = e.getY();
+        LineMessage msg = new LineMessage(x1, y1, x2, y2, canvas.getStrokeSettings().getColor().getRGB(), canvas.getStrokeSettings().getThickness());
+        canvas.getModule().sendMessage(msg);
     }
 
     @Override
@@ -66,6 +64,7 @@ public class LineDrawListener implements DrawListener {
         x2 = e.getX();
         y2 = e.getY();
         canvas.repaint();
+
     }
 
     @Override

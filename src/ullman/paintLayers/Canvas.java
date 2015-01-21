@@ -29,9 +29,11 @@ public class Canvas extends JComponent {
 
         for (int i = 0; i < images.length; i++) {
             g.drawImage(images[i], 0, 0, null);
+            if (i == currentLayer) {
+                strokeSetting.changeStrokeSettings((Graphics2D) g);
+                listener.drawPreview((Graphics2D) g);
+            }
         }
-        strokeSetting.changeStrokeSettings((Graphics2D) g);
-        listener.drawPreview((Graphics2D) g);
     }
 
     public void setDrawListener(DrawListener drawListener) {
